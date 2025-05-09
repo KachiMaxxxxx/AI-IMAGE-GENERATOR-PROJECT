@@ -1,18 +1,23 @@
-
+// Wait for the full HTML document to be loaded and parsed before executing the script
 document.addEventListener("DOMContentLoaded", () => {
+
+
+// ===DOM ELEMENTS REFERENCE=== //
 
 
   const themeToggle = document.querySelector(".theme-toggle");
   const promptForm = document.querySelector(".prompt-form");
-  const promptInput = document.querySelector(".input")
+  const promptInput = document.querySelector(".prompt-input")
   const promptBtn = document.querySelector(".prompt-btn");
   const generateBtn = document.querySelector(".generate-btn");
   const modelSelect = document.getElementById("model-select");
   const countSelect = document.getElementById("count-select");
   const ratioSelect = document.getElementById("ratio-select");
   const gridGallery = document.querySelector(".gallery-grid");
-  const API_KEY = ""/* type your access code here */
+  const API_KEY = ""; // TODO: Add your Hugging Face API key here
 
+
+// ===RANDOM PROMPTS=== //
 
 
   const examplePrompts = [
@@ -33,20 +38,37 @@ document.addEventListener("DOMContentLoaded", () => {
     "A giant turtle carrying a village on its back in the ocean",
   ];
 
+
+  // ===THEME INITIALIZATION===
+  
+
   const userPref = localStorage.getItem("theme");
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const theme = userPref || (prefersDark ? "dark" : "light");
+
+  // Apply the theme to the body and update the icon
   document.body.classList.toggle("dark-theme", theme === "dark");
+
+  // Set the icon based on the current theme
   themeToggle.querySelector("i").className = theme === "dark"
     ? "fa-solid fa-sun"
     : "fa-solid fa-moon";
+
+  // Set the theme in localStorage
   localStorage.setItem("theme", theme);
 
 
+  
+
+// ===THEME TOGGLE FUNCTION=== //
+
 
   const toggleTheme = () => {
+// Toggle the dark theme class on the body
     const isDarkTheme = document.body.classList.toggle("dark-theme");
     const newTheme = isDarkTheme ? "dark" : "light";
+
+    // Update the icon based on the new theme
     if (themeToggle) {
       const icon = themeToggle.querySelector("i");
       if (icon) {
@@ -54,13 +76,19 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Update the localStorage with the new theme
     localStorage.setItem("theme", isDarkTheme ? "dark" : "light");
   }
 
-  const getImageDimensions = (aspectRatio, baseSize = 512) => {
-    const [width, height] = aspectRatio.split("/").map(Number);
-    const scaleFactor = baseSize / Math.sqrt(width * height);
 
+// ===UTILITY: CALCULATE THE IMAGE DIMENSIONS=== //
+
+
+  const getImageDimensions = (aspectRatio, baseSize = 512) => {
+    const [width, height] = aspectRatio.split("/").map(Number);// Convert 16/9 to [16, 9]
+    const scaleFactor = baseSize / Math.sqrt(width * height);// Calculate the scale factor based on the base size
+
+    // Scale and round to nearest multiple of 16 (required by many ML models)
     let calculatedWidth = Math.round(width * scaleFactor);
     let calculatedHeight = Math.round(height * scaleFactor);
 
@@ -71,11 +99,16 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 
+// ===UPDATE IMAGE CARD ONCE IMAGE IS READY=== //
+
+
   const updateImageCard = (imgIndex, imgUrl) => {
     const imgCard = document.getElementById(`img-card-${imgIndex}`);
     if (!imgCard) return;
 
     imgCard.classList.remove("loading");
+
+    // Populate the image card with the generated image and a download button
     imgCard.innerHTML = `
       <img src="${imgUrl}" alt="Generated Image" class="result-img" />
       <div class="img-overlay">
@@ -87,12 +120,15 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 
+// === FETCH IMAGES FROM THE API AND HANDLES RESPONSES
+
+
   const generateImages = async (selectedModel, imageCount, aspectRatio, promptText) => {
     const MODEL_URL = `https://api-inference.huggingface.co/models/${selectedModel}`;
     const { width, height } = getImageDimensions(aspectRatio);
 
 
-    generateBtn.setAttribute("disabled", true);
+    generateBtn.setAttribute("disabled", true); // Disable the button to prevent multiple clicks
 
     const imagePromises = Array.from({ length: imageCount }, async (_, i) => {
       try {
@@ -111,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
+        // Handle failed response
         if (!response.ok) throw new Error((await response.json())?.error);
 
 
@@ -120,17 +157,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       catch (error) {
         console.log(error);
+
+        // Update the image card to show an error status
         const imgCard = document.getElementById(`img-card-${i}`);
         imgCard.classList.replace("loading", "error");
 
       }
     });
-    await Promise.allSettled(imagePromises);
-    generateBtn.removeAttribute("disabled");
+    await Promise.allSettled(imagePromises);// Wait for all responses to complete
+
+    generateBtn.removeAttribute("disabled");// Re-enable the button
   };
 
+
+// ===CREATE PLACEHOLDER IMAGE CARDS BEFORE THE IMAGES ARRIVE=== //
   const createImageCards = (selectedModel, imageCount, aspectRatio, promptText) => {
-    gridGallery.innerHTML = "";
+    gridGallery.innerHTML = "";// Clear the gallery before adding new cards
+
     for (let i = 0; i < imageCount; i++) {
       gridGallery.innerHTML += `
             <div class="img-card loading" id= "img-card-${i}" style= "aspect-ratio:${aspectRatio}">
@@ -141,11 +184,15 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
               `;
     }
-
+  
   };
 
+
+  // ===FORM SUBMISSION HANDLER FOR IMAGE GENERATION=== //
+
+
   const handleFormSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault();// Prevent page refresh
 
     const selectedModel = modelSelect.value;
     const imageCount = parseInt(countSelect.value) || 1;
@@ -155,15 +202,17 @@ document.addEventListener("DOMContentLoaded", () => {
     createImageCards(selectedModel, imageCount, aspectRatio, promptText);
     generateImages(selectedModel, imageCount, aspectRatio, promptText);
 
-  }
+  };
 
 
+  // ===BUTTON TO GENERATE RANDOM PROMPT=== //
   promptBtn.addEventListener("click", () => {
     const prompt = examplePrompts[Math.floor(Math.random() * examplePrompts.length)];
     promptInput.value = prompt;
     promptInput.focus();
 
   })
+// ===EVENT LISTENERS===
 
   promptForm.addEventListener("submit", handleFormSubmit);
 

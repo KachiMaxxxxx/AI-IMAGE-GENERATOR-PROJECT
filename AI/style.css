@@ -25,33 +25,6 @@ body.dark-theme {
 background: var(--color-card);
 background-image: radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 35%), radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 35%), radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
 } 
-/* USERS DEFAULT BROWSER MODE */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --color-primary: #5b21b6;
-    --color-primary-dark: #5c56e1;
-    --color-accent: #8b5cf6;
-    --color-card: #09090e;
-    --color-input: #18181b;
-    --color-text: #f1f1ff;
-    --color-placeholder: #a1a1aa;
-    --color-border: #27272a;
-    --color-gradient: linear-gradient(135deg, #5c56e1, #8b5cf6);
-  }
-}
-@media (prefers-color-scheme: light) {
-  :root {
-    --color-primary: #5c56e1;
-    --color-primary-dark: #5b21b6; 
-    --color-accent: #8b5cf6;
-    --color-card: #ffffff;
-    --color-input: #f1f1ff;
-    --color-text: #09090e;
-    --color-placeholder: #5c5a87;
-    --color-border: #d4d4ed;
-    --color-gradient: linear-gradient(135deg, #5c56e1, #8b5cf6);
-  }
-} */
 
 body {
   display: flex;
@@ -62,6 +35,7 @@ body {
   color: var(--color-text);
   font-family: "Roboto", sans-serif;
 }
+@media (max-width: 1024px){
 .container {
   width: 900px;
   padding: 32px;
@@ -72,6 +46,7 @@ body {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), 0 15px 60px rgba(0, 0, 0, 0.1),
     0 9px 46px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
+}
 }
 body.dark-theme .container {
   border: 1px solid var(--color-border);
@@ -151,7 +126,7 @@ body.dark-theme .container {
   position: relative;
   margin-bottom: 20px;
 }
-.input-wrapper .input {
+.input-wrapper .prompt-input {
   outline: none;
   width: 100%;
   resize: vertical;
@@ -166,7 +141,7 @@ body.dark-theme .container {
   border: 1px solid var(--color-border);
   transition: all 0.3s ease-in-out;
 }
-.input-wrapper .input:hover {
+.input-wrapper .prompt-input:hover {
   outline: none;
   border: 1px solid var(--color-border);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), 0 15px 60px rgba(0, 0, 0, 0.1),
@@ -175,7 +150,7 @@ body.dark-theme .container {
   color: var(--color-text);
   transform: translateY(2px);
 }
-.input-wrapper .input:focus {
+.input-wrapper .prompt-input:focus {
   outline: none;
   border: 1px solid var(--color-primary-dark);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), 0 15px 60px rgba(0, 0, 0, 0.1),
@@ -184,7 +159,7 @@ body.dark-theme .container {
   color: var(--color-text);
   transform: translateY(-10px);
 }
-.input-wrapper .input::placeholder {
+.input-wrapper .prompt-input::placeholder {
   color: var(--color-placeholder);
   font-size: 1rem;
   font-weight: 400;
