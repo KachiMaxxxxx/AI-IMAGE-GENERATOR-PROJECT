@@ -46,10 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const toggleTheme = () => {
     const isDarkTheme = document.body.classList.toggle("dark-theme");
+    const newTheme = isDarkTheme ? "dark" : "light";
     if (themeToggle) {
       const icon = themeToggle.querySelector("i");
       if (icon) {
-        icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+        icon.className = newTheme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
       }
     }
 
