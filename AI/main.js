@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const countSelect = document.getElementById("count-select");
   const ratioSelect = document.getElementById("ratio-select");
   const gridGallery = document.querySelector(".gallery-grid");
-  const API_KEY = CONFIG.API_KEY;
+  const API_KEY = ""/* type your access code here */
 
 
 

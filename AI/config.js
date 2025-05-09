@@ -1,3 +1,3 @@
-const CONFIG = {
+const config = {
     API_KEY: ""
 }
