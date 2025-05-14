@@ -1,3 +1,3 @@
 const config = {
-    API_KEY: "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"
+    API_KEY: "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"
 }

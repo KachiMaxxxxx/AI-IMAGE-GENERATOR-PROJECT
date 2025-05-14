@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const countSelect = document.getElementById("count-select");
   const ratioSelect = document.getElementById("ratio-select");
   const gridGallery = document.querySelector(".gallery-grid");
-  const API_KEY = ""; // TODO: Add your Hugging Face API key here
+  const API_KEY = "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"; // TODO: Add your Hugging Face API key here
 
 
 // ===RANDOM PROMPTS=== //
