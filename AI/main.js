@@ -107,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!imgCard) return;
 
     imgCard.classList.remove("loading");
-
     // Populate the image card with the generated image and a download button
     imgCard.innerHTML = `
       <img src="${imgUrl}" alt="Generated Image" class="result-img" />
